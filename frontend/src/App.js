@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Scorelist from './components/Scorelist';
+import Board from './components/Board';
+import Gameboard from './components/Gameboard'; // might delete later if not needed
 import './App.css';
 
-function App() {
+export default function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <html>
+      <title>
+        TicTacToe
+      </title>
+      <head>
+        <link rel="stylesheet" href="App.css" />
+      </head>
+      <body>
+        <div>
+          <h1>TicTacToe</h1>
+          <Board />
+        </div>
+        <div>
+          <Scorelist />
+        </div>
+      </body>
+    </html>
   );
 }
-
-export default App;
