@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 
 function Gameboard({ value, onSquareClick }) {
-    
-    function hover(thisButton) {
-        thisButton.target.style.backgroundColor = "grey";
-    }
-    function normal(thisButton) {
-        thisButton.target.style.backgroundColor = "lightgrey";
-    }
 
     return (
-        <button onMouseOver={hover} onMouseOut={normal} onClick={onSquareClick}>{value}</button>
+        <button className="gameSquare" onMouseOver={hover} onMouseOut={normal} onClick={onSquareClick}>{value}</button>
     );
 }
 
@@ -18,6 +11,7 @@ function Board({xTurn, squares, onPlay}) {
 
     function handleClick(i) {
         if (calculateWinner(squares) || squares[i]) {
+            // 10/3/25: inplement imput to prompt the user's name and then push the score to the backend!
             return;
         }
         const nextSquares = squares.slice();
@@ -66,14 +60,35 @@ function Board({xTurn, squares, onPlay}) {
 }
 
 export default function Game() {
-    const[xTurn, setXTurn] = useState(true);
     const[history, setHistory] = useState([Array(9).fill(null)]);
-    const currentSquares = history[history.length-1];
+    const[currentMove, setCurrentMove] = useState(0);
+    const xTurn = (currentMove % 2) === 0;
+    const currentSquares = history[currentMove];
+    
 
     function handlePlay(nextSquares) {
-        setHistory([...history, nextSquares]);
-        setXTurn(!xTurn);
+        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+        setHistory(nextHistory);
+        setCurrentMove(nextHistory.length -1);
     }
+
+    function jumpTo(nextMove) {
+        setCurrentMove(nextMove);
+    }
+
+    const moves = history.map((squares, move) => {
+        let description;
+        if (move > 0) {
+            description = "Go to move #" + move;
+        } else {
+            description = "Go to game start";
+        }
+        return (
+            <li key={move}>
+                <button className="jumpTo" onMouseOver={hover} onMouseOut={normal} onClick={() => jumpTo(move)}>{description}</button>;
+            </li>
+        )
+    });
 
     return (
         <div>
@@ -81,7 +96,7 @@ export default function Game() {
                 <Board xTurn={xTurn} squares={currentSquares} onPlay={handlePlay} />
             </div>
             <div className="game-info">
-                <ol>{}</ol>
+                <ol>{moves}</ol>
             </div>
         </div>
     )
@@ -105,4 +120,11 @@ function calculateWinner(squares) {
         }
     }
     return null;
+}
+
+function hover(thisButton) {
+    thisButton.target.style.backgroundColor = "grey";
+}
+function normal(thisButton) {
+    thisButton.target.style.backgroundColor = "lightgrey";
 }
