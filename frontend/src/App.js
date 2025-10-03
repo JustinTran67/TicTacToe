@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import Scorelist from './components/Scorelist';
-import Board from './components/Board';
-import Gameboard from './components/Gameboard'; // might delete later if not needed
+import Game from './components/Game';
 import './App.css';
 
 export default function App() {
@@ -15,11 +13,11 @@ export default function App() {
         <link rel="stylesheet" href="App.css" />
       </head>
       <body>
-        <div>
+        <div className = "main-game">
           <h1>TicTacToe</h1>
-          <Board />
+          <Game />
         </div>
-        <div>
+        <div className = "score-list-from-backend">
           <Scorelist />
         </div>
       </body>
