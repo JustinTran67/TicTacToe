@@ -85,7 +85,7 @@ export default function Game() {
         }
         return (
             <li key={move}>
-                <button className="jumpTo" onMouseOver={hover} onMouseOut={normal} onClick={() => jumpTo(move)}>{description}</button>;
+                <button className="jumpTo" style = {{backgroundColor: "#FFBF00"}} onMouseOver={hover} onMouseOut={normal} onClick={() => jumpTo(move)}>{description}</button>;
             </li>
         )
     });
@@ -123,8 +123,8 @@ function calculateWinner(squares) {
 }
 
 function hover(thisButton) {
-    thisButton.target.style.backgroundColor = "grey";
+    thisButton.target.style.backgroundColor = "#FFAC1C";
 }
 function normal(thisButton) {
-    thisButton.target.style.backgroundColor = "lightgrey";
+    thisButton.target.style.backgroundColor = "#FFBF00";
 }

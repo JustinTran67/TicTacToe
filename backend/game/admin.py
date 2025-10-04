@@ -4,4 +4,4 @@ from .models import Score
 
 @admin.register(Score)
 class ScoreAdmin(admin.ModelAdmin):
-    list_display = ("player", "result", "score", "time")
+    list_display = ("player", "result", "time")

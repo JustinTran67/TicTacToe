@@ -1,9 +1,11 @@
 body {
   text-align: center;
+  background-color: #6495ED;
+  color: white;
 }
 
 .gameSquare {
-  background-color: lightgrey;
+  background-color: #FFBF00;
   border: 2px solid;
   height: 100px;
   width: 100px;
@@ -21,4 +23,14 @@ body {
   font-size: 10px;
   font-weight: bold;
   vertical-align: middle;
+}
+
+.win {
+  color: green;
+}
+.lose {
+  color: red;
+}
+.draw {
+  color: yellow;
 }
