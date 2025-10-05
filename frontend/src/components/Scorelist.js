@@ -28,7 +28,7 @@ function Scorelist() {
     return (
         <div>
             <h2>Recent Scores</h2>
-            <ul>
+            <ul className="scoreList">
                 {scores.map((score) => (
                     <li key = {score.id}>
                         {score.player} - Result: <span className={determineListResult(score.result)}>{score.result}</span> - [{score.time}]

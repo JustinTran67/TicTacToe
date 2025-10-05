@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Gameboard({ value, onSquareClick }) {
 
@@ -11,9 +11,8 @@ function Board({xTurn, squares, onPlay}) {
 
     function handleClick(i) {
         if (calculateWinner(squares) || squares[i]) {
-            // 10/3/25: inplement imput to prompt the user's name and then push the score to the backend!
             return;
-        }
+        } 
         const nextSquares = squares.slice();
         if (xTurn) {
             nextSquares[i] = "X";
@@ -23,10 +22,14 @@ function Board({xTurn, squares, onPlay}) {
         onPlay(nextSquares);
     }
 
-    const winner = calculateWinner(squares);
+    const winner = calculateWinner(squares); //Find a way to handle ties.
     let status;
     if (winner) {
-        status = "Winner: " + winner;
+        if (winner === "Draw") {
+            status = "It's a Draw!";
+        } else {
+            status = "Winner: " + winner;
+        }
     } else {
         if (xTurn) {
             status = "Turn: X";
@@ -34,6 +37,14 @@ function Board({xTurn, squares, onPlay}) {
             status = "Turn: O";
         }
     }
+
+    useEffect(() => {
+        if (winner) {
+            handleWin(winner);
+        }
+    }, [winner]);
+
+
     
     return (
         <div>
@@ -85,7 +96,7 @@ export default function Game() {
         }
         return (
             <li key={move}>
-                <button className="jumpTo" style = {{backgroundColor: "#FFBF00"}} onMouseOver={hover} onMouseOut={normal} onClick={() => jumpTo(move)}>{description}</button>;
+                <button className="jumpTo" onMouseOver={hover} onMouseOut={normal} onClick={() => jumpTo(move)}>{description}</button>
             </li>
         )
     });
@@ -100,6 +111,44 @@ export default function Game() {
             </div>
         </div>
     )
+}
+
+function handleWin(winner) { // 10/4/25: Create a way to input custom names.
+    let winOrTie = "Win";
+    let loseOrTie = "Lose";
+    if (winner === "Draw") {
+        winOrTie = "Draw";
+        loseOrTie = "Draw";
+    }
+    
+    const winScoreData = {
+        player: winner,
+        result: winOrTie,
+    }
+    const loseScoreData = {
+        player: (winner === "X") ? "O" : "X",
+        result: loseOrTie,
+    }
+
+    postScore(winScoreData);
+    postScore(loseScoreData);
+}
+
+function postScore(scoreData) {
+    fetch('http://localhost:8000/api/scores/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(scoreData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 }
 
 function calculateWinner(squares) {
@@ -118,6 +167,9 @@ function calculateWinner(squares) {
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return squares[a];
         }
+    }
+    if (squares.every(square => square !== null)) {
+        return "Draw";
     }
     return null;
 }

@@ -15,7 +15,7 @@ body {
 }
 
 .jumpTo {
-  background-color: lightgrey;
+  background-color: #FFBF00;
   border: 2px solid;
   border-radius: 20px;
   height: 40px;
@@ -25,8 +25,12 @@ body {
   vertical-align: middle;
 }
 
+.scoreList  {
+  font-weight: bold;
+}
+
 .win {
-  color: green;
+  color: lightgreen;
 }
 .lose {
   color: red;
