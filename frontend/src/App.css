@@ -12,6 +12,11 @@ body {
   font-size: 30px;
   font-weight: bold;
   vertical-align: middle;
+  transition: background-color 0.3s ease;
+}
+
+.gameSquare:hover {
+  background-color: #FFAC1C;
 }
 
 .jumpTo {
@@ -22,7 +27,11 @@ body {
   width: 150px;
   font-size: 10px;
   font-weight: bold;
-  vertical-align: middle;
+  transition: background-color 0.3s ease;
+}
+
+.jumpTo:hover {
+  background-color: #FFAC1C;
 }
 
 .scoreList  {

@@ -5,22 +5,14 @@ import './App.css';
 export default function App() {
 
   return (
-    <html>
-      <title>
-        TicTacToe
-      </title>
-      <head>
-        <link rel="stylesheet" href="App.css" />
-      </head>
-      <body>
-        <div className = "main-game">
-          <h1>TicTacToe</h1>
-          <Game />
-        </div>
-        <div className = "score-list-from-backend">
-          <Scorelist />
-        </div>
-      </body>
-    </html>
+    <div>
+      <div className = "main-game">
+        <h1>TicTacToe</h1>
+        <Game />
+      </div>
+      <div className = "score-list-from-backend">
+        <Scorelist />
+      </div>
+    </div>
   );
 }

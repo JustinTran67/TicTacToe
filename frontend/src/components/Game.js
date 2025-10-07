@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 function Gameboard({ value, onSquareClick }) {
 
     return (
-        <button className="gameSquare" onMouseOver={hover} onMouseOut={normal} onClick={onSquareClick}>{value}</button>
+        <button className="gameSquare" onClick={onSquareClick}>{value}</button>
     );
 }
 
-function Board({xTurn, squares, onPlay}) {
+function Board({xTurn, squares, onPlay, player1, player2}) {
 
     function handleClick(i) {
         if (calculateWinner(squares) || squares[i]) {
@@ -22,13 +22,15 @@ function Board({xTurn, squares, onPlay}) {
         onPlay(nextSquares);
     }
 
-    const winner = calculateWinner(squares); //Find a way to handle ties.
+    const winner = calculateWinner(squares);
+    const winPlayer = (winner === "X") ? player1 : player2;
+    const result = (winPlayer) ? winPlayer : winner ;
     let status;
     if (winner) {
         if (winner === "Draw") {
             status = "It's a Draw!";
         } else {
-            status = "Winner: " + winner;
+            status = "Winner: " + result;
         }
     } else {
         if (xTurn) {
@@ -38,14 +40,6 @@ function Board({xTurn, squares, onPlay}) {
         }
     }
 
-    useEffect(() => {
-        if (winner) {
-            handleWin(winner);
-        }
-    }, [winner]);
-
-
-    
     return (
         <div>
             <div className="board-row">
@@ -73,6 +67,9 @@ function Board({xTurn, squares, onPlay}) {
 export default function Game() {
     const[history, setHistory] = useState([Array(9).fill(null)]);
     const[currentMove, setCurrentMove] = useState(0);
+    const [player1, setPlayer1] = useState("");
+    const [player2, setPlayer2] = useState("");
+
     const xTurn = (currentMove % 2) === 0;
     const currentSquares = history[currentMove];
     
@@ -82,6 +79,13 @@ export default function Game() {
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length -1);
     }
+
+    useEffect(() => {
+        const winner = calculateWinner(currentSquares);
+        if (winner) {
+            handleWin(winner, player1, player2);
+        }
+    }, [currentSquares]);
 
     function jumpTo(nextMove) {
         setCurrentMove(nextMove);
@@ -96,15 +100,21 @@ export default function Game() {
         }
         return (
             <li key={move}>
-                <button className="jumpTo" onMouseOver={hover} onMouseOut={normal} onClick={() => jumpTo(move)}>{description}</button>
+                <button className="jumpTo" onClick={() => jumpTo(move)}>{description}</button>
             </li>
         )
     });
 
-    return (
+    return ( 
         <div>
+            <div>
+                <label htmlFor="player1" className="player1"></label>
+                    <input type="text" id="player1" name = 'player1' placeholder='Enter Player "X" Name' value={player1} onChange={(e) => setPlayer1(e.target.value)} />
+                <label htmlFor="player2" className="player2"></label>
+                    <input type="text" id="player2" name = 'player2' placeholder='Enter Player "O" Name' value={player2} onChange={(e) => setPlayer2(e.target.value)} />
+            </div>
             <div className="game-board">
-                <Board xTurn={xTurn} squares={currentSquares} onPlay={handlePlay} />
+                <Board xTurn={xTurn} squares={currentSquares} onPlay={handlePlay} player1={player1} player2={player2} />
             </div>
             <div className="game-info">
                 <ol>{moves}</ol>
@@ -113,20 +123,23 @@ export default function Game() {
     )
 }
 
-function handleWin(winner) { // 10/4/25: Create a way to input custom names.
-    let winOrTie = "Win";
-    let loseOrTie = "Lose";
-    if (winner === "Draw") {
-        winOrTie = "Draw";
-        loseOrTie = "Draw";
-    }
+function handleWin(winner, player1, player2) {
+    const winPlayer = (winner === "X") ? player1 : player2;
+    const losePlayer = (winner === "X") ? player2 : player1;
+    const loseAlt = (winner === "X" ? "O" : "X");
+
+    const winOrTie = (winner === "Draw") ? "Draw" : "Win";
+    const loseOrTie = (winner === "Draw") ? "Draw" : "Lose";
+
+    const winAlt = (winner === "Draw") ? "O" : winner; //built for tie cases.
+    
     
     const winScoreData = {
-        player: winner,
+        player: winPlayer || winAlt,
         result: winOrTie,
     }
     const loseScoreData = {
-        player: (winner === "X") ? "O" : "X",
+        player: losePlayer || loseAlt,
         result: loseOrTie,
     }
 
@@ -172,11 +185,4 @@ function calculateWinner(squares) {
         return "Draw";
     }
     return null;
-}
-
-function hover(thisButton) {
-    thisButton.target.style.backgroundColor = "#FFAC1C";
-}
-function normal(thisButton) {
-    thisButton.target.style.backgroundColor = "#FFBF00";
 }
