@@ -1,4 +1,4 @@
-# TicTacToe Full Stack Project
+# TicTacToe
 
 A full stack TicTacToe game built with React frontend and Django backend.
 
