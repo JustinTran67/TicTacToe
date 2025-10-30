@@ -47,16 +47,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Development
-
-This project uses Git for version control. The repository is initialized at the root level to manage both frontend and backend code together.
-
-### Git Commands
-- `git status` - Check the current state
-- `git add .` - Stage all changes
-- `git commit -m "message"` - Commit changes
-- `git log --oneline` - View commit history
-
 ## Technologies Used
 
 - **Frontend**: React, HTML, CSS, JavaScript
